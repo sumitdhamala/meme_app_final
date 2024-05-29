@@ -22,7 +22,7 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  final bool _obsecureText = true;
+  bool _obsecureText = true;
   bool isRemember = true;
   final _formKey = GlobalKey<FormState>();
   bool isLogin = false;
@@ -144,8 +144,20 @@ class _LogInScreenState extends State<LogInScreen> {
                       return null;
                     }
                   },
+                  obscureText: _obsecureText,
                   decoration: InputDecoration(
                     hintText: "Password",
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _obsecureText = !_obsecureText;
+                        });
+                      },
+                      child: Icon(
+                        _obsecureText ? Icons.visibility : Icons.visibility_off,
+                        color: primaryColor,
+                      ),
+                    ),
                     prefixIcon: Icon(
                       Icons.lock_outlined,
                       color: grey,

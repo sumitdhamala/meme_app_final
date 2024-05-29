@@ -16,7 +16,7 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
-  final bool _obsecureText = true;
+  bool _obsecureText = true;
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -153,11 +153,23 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
                 TextFormField(
                   controller: passwordController,
+                  obscureText: _obsecureText,
                   decoration: InputDecoration(
                     hintText: "Password",
                     prefixIcon: Icon(
                       Icons.email_outlined,
                       color: grey,
+                    ),
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _obsecureText = !_obsecureText;
+                        });
+                      },
+                      child: Icon(
+                        _obsecureText ? Icons.visibility : Icons.visibility_off,
+                        color: primaryColor,
+                      ),
                     ),
                   ),
                 ),
@@ -176,11 +188,23 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       return null;
                     }
                   },
+                  obscureText: _obsecureText,
                   decoration: InputDecoration(
                     hintText: "Confirm Password",
                     prefixIcon: Icon(
                       Icons.lock_outlined,
                       color: grey,
+                    ),
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _obsecureText = !_obsecureText;
+                        });
+                      },
+                      child: Icon(
+                        _obsecureText ? Icons.visibility : Icons.visibility_off,
+                        color: primaryColor,
+                      ),
                     ),
                   ),
                 ),
