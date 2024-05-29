@@ -75,104 +75,128 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            opacity: 0.15,
-            image: AssetImage("assets/images/bubbles.jpg"),
+      body: Form(
+        key: _formKey,
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              opacity: 0.15,
+              image: AssetImage("assets/images/bubbles.jpg"),
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 120,
-              ),
-              Text(
-                "Welcome Back,",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "Sign in to continue",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: grey,
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 120,
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: "Email",
-                  prefixIcon: Icon(
-                    Icons.email_outlined,
+                Text(
+                  "Welcome Back,",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "Sign in to continue",
+                  style: TextStyle(
+                    fontSize: 18,
                     color: grey,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                controller: passController,
-                decoration: InputDecoration(
-                  hintText: "Password",
-                  prefixIcon: Icon(
-                    Icons.lock_outlined,
-                    color: grey,
-                  ),
+                SizedBox(
+                  height: 30,
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              InkWell(
-                  onTap: () {
-                    login();
+                TextFormField(
+                  controller: emailController,
+                  validator: (value) {
+                    if (value == "") {
+                      return 'Please enter your email';
+                    }
+                    // Regular expression for email validation
+                    final emailRegex =
+                        RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                    if (!emailRegex.hasMatch(value!)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
                   },
-                  child: !isLogin
-                      ? CustomButton(
-                          buttonName: "Login",
-                        )
-                      : CircularProgressIndicator(
-                          color: primaryColor,
-                        )),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Don't have an account ?",
-                    style: TextStyle(color: grey),
-                  ),
-                  TextButton(
-                    style: ButtonStyle(
-                      overlayColor: WidgetStateProperty.all<Color>(paleBlue),
+                  decoration: InputDecoration(
+                    hintText: "Email",
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      color: grey,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CreateAccountPage(),
-                        ),
-                      );
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  controller: passController,
+                  validator: (value) {
+                    if (value == "") {
+                      return "Please enter your password!";
+                    } else if (value!.length < 8) {
+                      return "Please enter valid password!";
+                    } else {
+                      return null;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    prefixIcon: Icon(
+                      Icons.lock_outlined,
+                      color: grey,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                InkWell(
+                    onTap: () {
+                      login();
                     },
-                    child: Text(
-                      "Sign up",
-                      style: TextStyle(color: Colors.black),
+                    child: !isLogin
+                        ? CustomButton(
+                            buttonName: "Login",
+                          )
+                        : CircularProgressIndicator(
+                            color: primaryColor,
+                          )),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account ?",
+                      style: TextStyle(color: grey),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    TextButton(
+                      style: ButtonStyle(
+                        overlayColor: WidgetStateProperty.all<Color>(paleBlue),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreateAccountPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Sign up",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

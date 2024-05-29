@@ -58,145 +58,171 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            opacity: 0.15,
-            image: AssetImage("assets/images/bubbles.jpg"),
+      body: Form(
+        key: _formKey,
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              opacity: 0.15,
+              image: AssetImage("assets/images/bubbles.jpg"),
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Welcome Back,",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "Sign up to continue",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: grey,
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Welcome Back,",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: userNameController,
-                decoration: InputDecoration(
-                  hintText: "Name",
-                  prefixIcon: Icon(
-                    Icons.person_outline_outlined,
+                Text(
+                  "Sign up to continue",
+                  style: TextStyle(
+                    fontSize: 18,
                     color: grey,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: "Email",
-                  prefixIcon: Icon(
-                    Icons.email_outlined,
-                    color: grey,
+                SizedBox(
+                  height: 30,
+                ),
+                TextFormField(
+                  controller: userNameController,
+                  decoration: InputDecoration(
+                    hintText: "Name",
+                    prefixIcon: Icon(
+                      Icons.person_outline_outlined,
+                      color: grey,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                controller: phoneController,
-                decoration: InputDecoration(
-                  hintText: "Phone",
-                  prefixIcon: Icon(
-                    Icons.phone_enabled_outlined,
-                    color: grey,
-                  ),
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  hintText: "Password",
-                  prefixIcon: Icon(
-                    Icons.email_outlined,
-                    color: grey,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                controller: cPasswordController,
-                validator: (value) {
-                  if (value != passwordController.text) {
-                    return "Password did not match";
-                  }
-                  if (value == "") {
-                    return "Password must be greater or equal to 8 characters!";
-                  } else {
+                TextFormField(
+                  controller: emailController,
+                  validator: (value) {
+                    if (value == "") {
+                      return 'Please enter your email';
+                    }
+                    // Regular expression for email validation
+                    final emailRegex =
+                        RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                    if (!emailRegex.hasMatch(value!)) {
+                      return 'Please enter a valid email';
+                    }
                     return null;
-                  }
-                },
-                decoration: InputDecoration(
-                  hintText: "Confirm Password",
-                  prefixIcon: Icon(
-                    Icons.lock_outlined,
-                    color: grey,
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Email",
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      color: grey,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              InkWell(
-                  onTap: () {
-                    verify();
+                SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  controller: phoneController,
+                  validator: (value) {
+                    if (value == "") {
+                      return 'Please enter your phone number';
+                    }
+                    // Regular expression for phone number validation
+                    final phoneRegex = RegExp(r'^\d{10}$');
+                    if (!phoneRegex.hasMatch(value!)) {
+                      return 'Please enter a valid 10-digit phone number';
+                    }
+                    return null;
                   },
-                  child: !isCreated
-                      ? CustomButton(
-                          buttonName: "CREATE ACCOUNT",
-                        )
-                      : CircularProgressIndicator(
-                          color: primaryColor,
-                        )),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Already have an account ?",
-                    style: TextStyle(color: grey),
+                  decoration: InputDecoration(
+                    hintText: "Phone",
+                    prefixIcon: Icon(
+                      Icons.phone_enabled_outlined,
+                      color: grey,
+                    ),
                   ),
-                  TextButton(
-                      style: ButtonStyle(
-                          overlayColor:
-                              WidgetStateProperty.all<Color>(paleBlue)),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "Sign in",
-                        style: TextStyle(color: Colors.black),
-                      ))
-                ],
-              )
-            ],
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      color: grey,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  controller: cPasswordController,
+                  validator: (value) {
+                    if (value != passwordController.text) {
+                      return "Password did not match";
+                    }
+                    if (value == "") {
+                      return "Password must be greater or equal to 8 characters!";
+                    } else {
+                      return null;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Confirm Password",
+                    prefixIcon: Icon(
+                      Icons.lock_outlined,
+                      color: grey,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                InkWell(
+                    onTap: () {
+                      verify();
+                    },
+                    child: !isCreated
+                        ? CustomButton(
+                            buttonName: "CREATE ACCOUNT",
+                          )
+                        : CircularProgressIndicator(
+                            color: primaryColor,
+                          )),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Already have an account ?",
+                      style: TextStyle(color: grey),
+                    ),
+                    TextButton(
+                        style: ButtonStyle(
+                            overlayColor:
+                                WidgetStateProperty.all<Color>(paleBlue)),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Sign in",
+                          style: TextStyle(color: Colors.black),
+                        ))
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

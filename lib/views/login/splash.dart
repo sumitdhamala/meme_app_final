@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
             context, MaterialPageRoute(builder: (context) => HomePage()));
       });
     } else {
-      Future.delayed(Duration(milliseconds: 2200), () {
+      Future.delayed(Duration(seconds: 10), () {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LogInScreen()));
       });
@@ -46,55 +46,40 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage('assets/images/bg.jpg'),
-            colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.2),
-              BlendMode.dstATop,
+      backgroundColor: Color.fromARGB(255, 185, 219, 235),
+      body: Stack(
+        children: [
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/meme.png"),
+              ),
             ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  ColorizeAnimatedText(
-                    "Meme",
-                    textStyle: TextStyle(
-                      fontFamily: 'SedgwickAve',
-                      fontSize: 100,
-                    ),
-                    colors: [
-                      primaryColor,
-                      Colors.purple,
-                    ],
-                  )
-                ],
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                opacity: 0.1,
+                fit: BoxFit.cover,
+                image: AssetImage(
+                  "assets/images/doodle.png",
+                ),
               ),
             ),
-            DefaultTextStyle(
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14.0,
-              ),
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  TypewriterAnimatedText('Start your day with joy'),
-                ],
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 163),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: LoadingAnimationWidget.staggeredDotsWave(
+                  color: Color.fromARGB(255, 63, 59, 59), size: 42),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            LoadingAnimationWidget.stretchedDots(color: primaryColor, size: 60)
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
