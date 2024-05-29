@@ -88,69 +88,65 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 10,
                 ),
-                // ElevatedButton(
-                //   style: ButtonStyle(
-                //       backgroundColor:
-                //           WidgetStateProperty.all<Color>(Colors.teal),
-                //       foregroundColor:
-                //           WidgetStateProperty.all<Color>(Colors.white)),
-                //   onPressed: () {
-                //     Navigator.push(context,
-                //         MaterialPageRoute(builder: (context) => EditProfile()));
-                //   },
-                //   child: Text("Edit"),
-                // ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        if (!isPostedSelected) {
-                          setState(() {
-                            isPostedSelected = true;
-                          });
-                        }
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 140,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 1,
-                              color: const Color.fromARGB(255, 87, 84, 84)),
-                          color: isPostedSelected ? Colors.teal : Colors.grey,
-                          borderRadius: BorderRadius.circular(10),
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (!isPostedSelected) {
+                              setState(() {
+                                isPostedSelected = true;
+                              });
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 140,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 1,
+                                  color: const Color.fromARGB(255, 87, 84, 84)),
+                              color:
+                                  isPostedSelected ? Colors.teal : Colors.grey,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Center(
+                              child: Text("Posted"),
+                            ),
+                          ),
                         ),
-                        child: const Center(
-                          child: Text("Posted"),
-                        ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        if (isPostedSelected) {
-                          setState(() {
-                            isPostedSelected = false;
-                          });
-                        }
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 140,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 1,
-                              color: const Color.fromARGB(255, 87, 84, 84)),
-                          borderRadius: BorderRadius.circular(10),
-                          color: !isPostedSelected ? Colors.teal : Colors.grey,
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (isPostedSelected) {
+                              setState(() {
+                                isPostedSelected = false;
+                              });
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 140,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 1,
+                                  color: const Color.fromARGB(255, 87, 84, 84)),
+                              borderRadius: BorderRadius.circular(10),
+                              color:
+                                  !isPostedSelected ? Colors.teal : Colors.grey,
+                            ),
+                            child: const Center(
+                              child: Text("Liked"),
+                            ),
+                          ),
                         ),
-                        child: const Center(
-                          child: Text("Liked"),
-                        ),
-                      ),
-                    ),
+                      ],
+                    )
                   ],
                 ),
                 FutureBuilder(

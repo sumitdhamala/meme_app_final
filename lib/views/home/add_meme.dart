@@ -141,7 +141,7 @@ class _AddMemeState extends State<AddMeme> {
                                   ),
                                   TextButton(
                                     style: const ButtonStyle(
-                                        side: MaterialStatePropertyAll(
+                                        side: WidgetStatePropertyAll(
                                             BorderSide())),
                                     onPressed: () async {
                                       image = await picker.pickImage(
@@ -168,11 +168,11 @@ class _AddMemeState extends State<AddMeme> {
                 child: TextButton(
                   style: ButtonStyle(
                       fixedSize:
-                          const MaterialStatePropertyAll(Size.fromWidth(400)),
-                      backgroundColor: MaterialStatePropertyAll(
+                          const WidgetStatePropertyAll(Size.fromWidth(400)),
+                      backgroundColor: WidgetStatePropertyAll(
                           image == null ? Colors.grey : primaryColor),
                       foregroundColor:
-                          MaterialStatePropertyAll(secondaryColor)),
+                          WidgetStatePropertyAll(secondaryColor)),
                   onPressed: image == null
                       ? null
                       : () async {

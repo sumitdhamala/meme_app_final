@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(10.0),
         child: Consumer<MemeProvider>(
           builder: (context, memeProvider, child) {
             return memeProvider.isFetchingDone

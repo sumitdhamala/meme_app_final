@@ -97,9 +97,9 @@ class _EditProfileState extends State<EditProfile> {
             ),
             ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+                  backgroundColor: WidgetStateProperty.all<Color>(Colors.teal),
                   foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white)),
+                      WidgetStateProperty.all<Color>(Colors.white)),
               onPressed: () async {
                 String token = AuthProvider.authId;
 

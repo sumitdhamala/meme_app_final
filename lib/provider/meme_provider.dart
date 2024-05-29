@@ -91,6 +91,7 @@ class MemeProvider with ChangeNotifier {
     for (var i = 0; i < memesList.length; i++) {
       if (memesList[i].id == id) {
         memesList[i] = decodedResponse["meme"];
+        notifyListeners();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Can only be edit by owner")));

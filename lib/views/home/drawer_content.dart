@@ -31,9 +31,9 @@ class _DrawerContentState extends State<DrawerContent> {
                   children: [
                     TextButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(primaryColor),
+                        backgroundColor: WidgetStatePropertyAll(primaryColor),
                         foregroundColor:
-                            MaterialStatePropertyAll(secondaryColor),
+                            WidgetStatePropertyAll(secondaryColor),
                       ),
                       onPressed: () {
                         Navigator.pushReplacement(
@@ -45,9 +45,9 @@ class _DrawerContentState extends State<DrawerContent> {
                     ),
                     TextButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(primaryColor),
+                        backgroundColor: WidgetStatePropertyAll(primaryColor),
                         foregroundColor:
-                            MaterialStatePropertyAll(secondaryColor),
+                            WidgetStatePropertyAll(secondaryColor),
                       ),
                       onPressed: () {
                         Navigator.pop(context);

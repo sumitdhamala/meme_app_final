@@ -26,11 +26,9 @@ class MemeContainer extends StatelessWidget {
 
     var prov = Provider.of<AuthProvider>(context, listen: false);
     String userId = prov.userDetails!.id;
-    // var mProv=Provider.of<MemeProvider>(context,listen: false);
-    // String ? memeUploader=mProv.memesList[index]["uploadedBy"]["imageURL"];
 
     return Container(
-      height: 500,
+      height: 480,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -42,7 +40,7 @@ class MemeContainer extends StatelessWidget {
           ListTile(
             contentPadding: const EdgeInsets.all(0),
             leading: CircleAvatar(
-              radius: 30,
+              radius: 25,
               backgroundImage: NetworkImage(
                   meme.uploadedBy.imageURL ?? User.defaultProfileImageURL),
             ),
@@ -67,60 +65,71 @@ class MemeContainer extends StatelessWidget {
             subtitle: Text(formattedDate),
             trailing: Consumer<MemeProvider>(
               builder: (context, provMeme, child) {
-                return PopupMenuButton<String>(
-                  onSelected: (value) {
-                    switch (value) {
-                      case "delete":
-                        {
-                          provMeme.deleteMeme(meme.id, context);
-                          break;
-                        }
-                      case "edit":
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Edit caption"),
-                                content: TextField(
-                                  controller: captionCntrl,
-                                ),
-                                actions: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          provMeme.editMeme(meme.id,
-                                              captionCntrl.text, context);
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text("Confirm"),
+                bool isauth = userId == meme.uploadedBy.id;
+
+                return isauth
+                    ? PopupMenuButton<String>(
+                        onSelected: (value) {
+                          switch (value) {
+                            case "delete":
+                              {
+                                provMeme.deleteMeme(meme.id, context);
+                                break;
+                              }
+                            case "edit":
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Edit caption"),
+                                      content: TextField(
+                                        controller: captionCntrl,
                                       ),
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('Cancle'),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              );
-                            });
-                    }
-                  },
-                  itemBuilder: (context) {
-                    return [
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text("Delete"),
-                      ),
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Text("Edit"),
-                      ),
-                    ];
-                  },
-                );
+                                      actions: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                provMeme.editMeme(meme.id,
+                                                    captionCntrl.text, context);
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("Confirm"),
+                                            ),
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: const Text('Cancle'),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  });
+                          }
+                        },
+                        itemBuilder: (context) {
+                          return [
+                            const PopupMenuItem(
+                              value: 'delete',
+                              child: Text("Delete"),
+                            ),
+                            const PopupMenuItem(
+                              value: 'edit',
+                              child: Text("Edit"),
+                            ),
+                          ];
+                        },
+                      )
+                    : IconButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text(
+                                  "This icon can only be performed by owner")));
+                        },
+                        icon: const Icon(Icons.more_vert));
               },
             ),
           ),
@@ -140,7 +149,7 @@ class MemeContainer extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -163,7 +172,7 @@ class MemeContainer extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 1),
                   Text(" ${meme.likes.length} likes"),
                 ],
               ),
@@ -173,7 +182,7 @@ class MemeContainer extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5),
           const Divider(thickness: 2),
         ],
       ),

@@ -22,7 +22,7 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  bool _obsecureText = true;
+  final bool _obsecureText = true;
   bool isRemember = true;
   final _formKey = GlobalKey<FormState>();
   bool isLogin = false;
