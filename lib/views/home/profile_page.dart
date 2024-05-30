@@ -19,6 +19,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late User usertoShow = widget.user;
   bool isPostedSelected = true;
 
   @override
@@ -48,16 +49,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     CircleAvatar(
                       radius: 40,
                       backgroundImage: NetworkImage(
-                          widget.user.imageURL ?? User.defaultProfileImageURL),
+                          usertoShow.imageURL ?? User.defaultProfileImageURL),
                     ),
                     Consumer<AuthProvider>(builder: (context, authProvider, _) {
                       if (authProvider.userDetails!.id == widget.user.id) {
                         return IconButton(
-                          onPressed: () {
-                            Navigator.push(
+                          onPressed: () async {
+                            await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => const EditProfile()));
+                            usertoShow = authProvider.userDetails!;
+                            setState(() {});
                           },
                           icon: const Icon(Icons.edit),
                         );
@@ -75,15 +78,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 UserInfoRow(
                   title: "Name",
-                  value: widget.user.name,
+                  value: usertoShow.name,
                 ),
                 UserInfoRow(
                   title: "Email",
-                  value: widget.user.email,
+                  value: usertoShow.email,
                 ),
                 UserInfoRow(
                   title: "Phone",
-                  value: widget.user.phone,
+                  value: usertoShow.phone,
                 ),
                 const SizedBox(
                   height: 10,

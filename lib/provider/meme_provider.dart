@@ -68,10 +68,7 @@ class MemeProvider with ChangeNotifier {
             memesList.removeAt(i);
           }
           notifyListeners();
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Can only be deleted by owner")));
-        }
+        } else {}
       }
     }
   }
@@ -84,19 +81,19 @@ class MemeProvider with ChangeNotifier {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
         },
-        body: jsonEncode({"capion": cntrl}));
+        body: jsonEncode({"caption": cntrl}));
 
     var decodedResponse = jsonDecode(response.body);
-
-    for (var i = 0; i < memesList.length; i++) {
-      if (memesList[i].id == id) {
-        memesList[i] = decodedResponse["meme"];
-        notifyListeners();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Can only be edit by owner")));
+    if (response.statusCode == 200) {
+      for (var i = 0; i < memesList.length; i++) {
+        if (memesList[i].id == id) {
+          memesList[i] = Meme.parseFromJSON(decodedResponse['meme']);
+          notifyListeners();
+        } else {
+          print(decodedResponse['message']);
+        }
       }
-    }
+    
   }
 
   Future<void> getLikedMeme() async {
@@ -131,11 +128,11 @@ class MemeProvider with ChangeNotifier {
       postedMemesList = (decodedResponse as List<dynamic>)
           .map((e) => e as Map<String, dynamic>)
           .toList();
-      print(decodedResponse);
       notifyListeners();
     } else {
       print(decodedResponse['message']);
     }
     print(response.statusCode);
   }
+}
 }

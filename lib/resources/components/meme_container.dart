@@ -1,12 +1,16 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, must_be_immutable, prefer_is_empty
 
+import 'dart:convert';
+
 import 'package:meme_app_final_project/models/user.dart';
 import 'package:meme_app_final_project/provider/auth_provider.dart';
 import 'package:meme_app_final_project/provider/meme_provider.dart';
+import 'package:meme_app_final_project/resources/constant.dart';
 import 'package:meme_app_final_project/views/home/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart ' as http;
 
 import '../../models/meme.dart';
 
@@ -20,15 +24,36 @@ class MemeContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> likedUserList = [];
+
     TextEditingController captionCntrl = TextEditingController();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
     String formattedDate = dateFormat.format(meme.createdAt);
 
     var prov = Provider.of<AuthProvider>(context, listen: false);
     String userId = prov.userDetails!.id;
+    String token = AuthProvider.authId;
+
+    Future getLikedUser() async {
+      var response = await http.get(
+          Uri.parse("$baseApi"
+              "memes"
+              "/${meme.id}"
+              "/likers"),
+          headers: {'Authorization': 'Bearer $token'});
+      var decodedResponse = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        likedUserList = (decodedResponse as List<dynamic>)
+            .map((e) => (e as Map<String, dynamic>))
+            .toList();
+        // print(likedUserList);
+      } else {
+        print(decodedResponse["message"]);
+      }
+    }
 
     return Container(
-      height: 480,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -66,7 +91,6 @@ class MemeContainer extends StatelessWidget {
             trailing: Consumer<MemeProvider>(
               builder: (context, provMeme, child) {
                 bool isauth = userId == meme.uploadedBy.id;
-
                 return isauth
                     ? PopupMenuButton<String>(
                         onSelected: (value) {
@@ -123,13 +147,14 @@ class MemeContainer extends StatelessWidget {
                           ];
                         },
                       )
-                    : IconButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                              content: Text(
-                                  "This icon can only be performed by owner")));
-                        },
-                        icon: const Icon(Icons.more_vert));
+                    : SizedBox();
+                // : IconButton(
+                //     onPressed: () {
+                //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                //           content: Text(
+                //               "This icon can only be performed by owner")));
+                //     },
+                //     icon: const Icon(Icons.more_vert));
               },
             ),
           ),
@@ -173,7 +198,50 @@ class MemeContainer extends StatelessWidget {
                     },
                   ),
                   const SizedBox(width: 1),
-                  Text(" ${meme.likes.length} likes"),
+                  Row(
+                    children: [
+                      Text(" ${meme.likes.length} "),
+                      InkWell(
+                          onTap: () async {
+                            // for (var i = 0; i < likedUserList.length; i++) {
+                            //   print(likedUserList[i]);
+                            // }
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return SingleChildScrollView(
+                                    child: Container(
+                                      height: 200,
+                                      width: double.infinity,
+                                      child: Column(
+                                        children: [
+                                          // ListView.builder(
+                                          //     itemBuilder: (context, index) {
+                                          //   getLikedUser();
+
+                                          //   return ListTile(
+                                          //       // leading: CircleAvatar(
+                                          //       //   backgroundImage: NetworkImage(
+                                          //       //       "${likedUserList[index]["imageURL"]}"),
+                                          //       // ),
+                                          //       // title: InkWell(
+                                          //       //   onTap: () {
+                                          //       //     // Navigator.push(context, MaterialPageRoute(builder: (context){return ProfilePage(user: user)}));
+                                          //       //   },
+                                          //       //   child: Text(
+                                          //       //       "${likedUserList[index]["name"]}"),
+                                          //       // ),
+                                          //       );
+                                          // })
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Text("likes")),
+                    ],
+                  ),
                 ],
               ),
               const Icon(

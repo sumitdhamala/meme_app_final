@@ -61,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
             width: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
-                opacity: 0.1,
+                opacity: 0.08,
                 fit: BoxFit.cover,
                 image: AssetImage(
                   "assets/images/doodle.png",
