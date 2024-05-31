@@ -24,7 +24,7 @@ class MemeContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> likedUserList = [];
+    List<User> likedUserList = [];
 
     TextEditingController captionCntrl = TextEditingController();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
@@ -45,9 +45,9 @@ class MemeContainer extends StatelessWidget {
 
       if (response.statusCode == 200) {
         likedUserList = (decodedResponse as List<dynamic>)
-            .map((e) => (e as Map<String, dynamic>))
+            .map((e) => User.parseFromJSON(e as Map<String, dynamic>))
             .toList();
-        // print(likedUserList);
+        print(likedUserList);
       } else {
         print(decodedResponse["message"]);
       }
@@ -203,38 +203,46 @@ class MemeContainer extends StatelessWidget {
                       Text(" ${meme.likes.length} "),
                       InkWell(
                           onTap: () async {
+                            await getLikedUser();
+
                             // for (var i = 0; i < likedUserList.length; i++) {
                             //   print(likedUserList[i]);
                             // }
+
                             showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return SingleChildScrollView(
-                                    child: Container(
-                                      height: 200,
-                                      width: double.infinity,
-                                      child: Column(
-                                        children: [
-                                          // ListView.builder(
-                                          //     itemBuilder: (context, index) {
-                                          //   getLikedUser();
+                                  return Container(
+                                    width: double.infinity,
+                                    child: Column(
+                                      children: [
+                                        ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: likedUserList.length,
+                                            itemBuilder: (context, index) {
+                                              // getLikedUser();
 
-                                          //   return ListTile(
-                                          //       // leading: CircleAvatar(
-                                          //       //   backgroundImage: NetworkImage(
-                                          //       //       "${likedUserList[index]["imageURL"]}"),
-                                          //       // ),
-                                          //       // title: InkWell(
-                                          //       //   onTap: () {
-                                          //       //     // Navigator.push(context, MaterialPageRoute(builder: (context){return ProfilePage(user: user)}));
-                                          //       //   },
-                                          //       //   child: Text(
-                                          //       //       "${likedUserList[index]["name"]}"),
-                                          //       // ),
-                                          //       );
-                                          // })
-                                        ],
-                                      ),
+                                              return ListTile(
+                                                leading: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      "${likedUserList[index].imageURL ?? User.defaultProfileImageURL}"),
+                                                ),
+                                                title: InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return ProfilePage(
+                                                          user: likedUserList[
+                                                              index]);
+                                                    }));
+                                                  },
+                                                  child: Text(
+                                                      "${likedUserList[index].name}"),
+                                                ),
+                                              );
+                                            })
+                                      ],
                                     ),
                                   );
                                 });
